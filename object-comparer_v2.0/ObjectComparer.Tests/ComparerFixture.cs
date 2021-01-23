@@ -143,7 +143,105 @@ namespace ObjectComparer.Tests
 
             Assert.IsTrue(Comparer.AreSimilar(studentListA, studentListB));
         }
-              
+
+        [TestMethod]
+        public void Students_are_similar_InDictionary()
+        {
+            var a = new Student
+            {
+                Name = "John",
+                Id = 100,
+                Marks = new[] { 80, 90, 100 }
+            };
+
+            var b = new Student
+            {
+                Name = "John",
+                Id = 100,
+                Marks = new[] { 90, 80, 100 }
+            };
+            var StudentDictionaryA
+                = new Dictionary<int, Student>();
+            StudentDictionaryA.Add(a.Id, a);
+
+            var StudentDictionaryB
+                = new Dictionary<int, Student>();
+            StudentDictionaryB.Add(b.Id, b);
+
+            Assert.IsTrue(Comparer.AreSimilar(StudentDictionaryA, StudentDictionaryB));
+        }
+
+        [TestMethod]
+        public void Students_are_not_similar_InDictionary()
+        {
+            var a = new Student
+            {
+                Name = "John",
+                Id = 100,
+                Marks = new[] { 80, 90, 100 }
+            };
+
+            var b = new Student
+            {
+                Name = "John",
+                Id = 101,
+                Marks = new[] { 90, 80, 100 }
+            };
+            var StudentDictionaryA
+                = new Dictionary<int, Student>();
+            StudentDictionaryA.Add(a.Id, a);
+
+            var StudentDictionaryB
+                = new Dictionary<int, Student>();
+            StudentDictionaryB.Add(b.Id, b);
+
+            Assert.IsFalse(Comparer.AreSimilar(StudentDictionaryA, StudentDictionaryB));
+        }
+
+        [TestMethod]
+        public void Values_are_not_similar_InDictionary()
+        {
+          
+            var StudentDictionaryA
+                = new Dictionary<int, string>();
+            StudentDictionaryA.Add(10, "Test1");
+
+            var StudentDictionaryB
+               = new Dictionary<int, string>();
+            StudentDictionaryB.Add(10, "TestB");
+
+            Assert.IsFalse(Comparer.AreSimilar(StudentDictionaryA, StudentDictionaryB));
+        }
+
+        [TestMethod]
+        public void Keys_are_not_similar_InDictionary()
+        {
+
+            var StudentDictionaryA
+                = new Dictionary<int, string>();
+            StudentDictionaryA.Add(10, "Test1");
+
+            var StudentDictionaryB
+               = new Dictionary<int, string>();
+            StudentDictionaryB.Add(11, "Test1");
+
+            Assert.IsFalse(Comparer.AreSimilar(StudentDictionaryA, StudentDictionaryB));
+        }
+
+        [TestMethod]
+        public void Values_are_similar_InDictionary()
+        {
+
+            var StudentDictionaryA
+                = new Dictionary<int, string>();
+            StudentDictionaryA.Add(10, "Test1");
+
+            var StudentDictionaryB
+               = new Dictionary<int, string>();
+            StudentDictionaryB.Add(10, "Test1");
+
+            Assert.IsTrue(Comparer.AreSimilar(StudentDictionaryA, StudentDictionaryB));
+        }      
 
     }
 }
