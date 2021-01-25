@@ -19,31 +19,13 @@ namespace ObjectComparer
             CompareFactory compareFactory = new ObjectFactory();
 
             Type type = obj1.GetType();
-            if (type.IsPrimitive || typeof(string).Equals(type))
+            var compareObject = compareFactory.GetCompareObject(type);
+            if (compareObject.GetType().Name == "CompareProperties")
             {
-                var comparePrimitive = compareFactory.GetCompareObject("Primitive");
-                return comparePrimitive.Compare(obj1, obj2);
+                return compareObject.Compare(type, obj1, obj2);
             }
-            if (type.IsArray)
-            {
-                var compareArray = compareFactory.GetCompareObject("Array");
-                return compareArray.Compare(obj1, obj2);
-            }
-            if (type.Name.Contains("List"))
-            {
-                var compareList = compareFactory.GetCompareObject("List");
-                return compareList.Compare(obj1, obj2);
-            }
-            if (type.Name.Contains("Dictionary"))
-            {
-                var compareDictioanry = compareFactory.GetCompareObject("Dictionary");
-                return compareDictioanry.Compare(obj1, obj2);
-            }
-            else
-            {                
-                var compareProperties = compareFactory.GetCompareObject("Properties");
-                return compareProperties.Compare(type, obj1, obj2);
-            }
-        }       
+            return compareObject.Compare(obj1, obj2);
+
+        }
     }
 }

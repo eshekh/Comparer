@@ -6,30 +6,34 @@ using System.Threading.Tasks;
 
 namespace ObjectComparer
 {
-    public abstract class CompareFactory
+    public interface CompareFactory
     {
-        public abstract ICompare GetCompareObject(string ObjectType);
+        ICompare GetCompareObject(Type ObjectType);
     }
 
     public class ObjectFactory : CompareFactory
     {
-        public override ICompare GetCompareObject(string ObjectType)
+        public ICompare GetCompareObject(Type type)
         {
-            switch (ObjectType)
+            if (type.IsPrimitive || typeof(string).Equals(type))
             {
-                case "Dictionary":
-                    return new CompareDictionary();
-                case "List":
-                    return new CompareList();
-                case "Array":
-                    return new CompareArray();
-                case "Primitive":
-                    return new ComparePrimitive();
-                case "Properties":
-                    return new CompareProperties();
-                default:
-                    throw new ApplicationException(string.Format("Object Type '{0}' cannot be created", ObjectType));
-
+                return new ComparePrimitive();
+            }
+            if (type.IsArray)
+            {
+                return new CompareArray();
+            }
+            if (type.Name.Contains("List"))
+            {
+                return new CompareList();
+            }
+            if (type.Name.Contains("Dictionary"))
+            {
+                return new CompareDictionary();
+            }
+            else
+            {
+                return new CompareProperties();
             }
         }
     }
